@@ -82,7 +82,81 @@ perfects n = [x | x <- [2..n], sum(factors(x))-x == x]
 prime :: Int -> Bool
 prime n = factors(n) == [1,n]
 
+scalarproduct :: [Int] -> [Int] -> Int
+scalarproduct lst1 lst2 = sum ([ (x*y) | (x,y)<-(zip lst1 lst2)])
 
+insert :: Ord a => a -> [a] -> [a]
+insert x [] = [x]
+insert x (y:ys) | x <= y = x : y : ys
+                | otherwise = y : (insert x ys)
+
+isort :: Ord a => [a] -> [a]
+isort [] = []
+isort (x:xs) = insert x (isort xs)
+
+qsort :: Ord a => [a] -> [a]
+qsort [] = []
+qsort (x:xs) = qsort smaller ++ [x] ++ qsort greater
+               where
+               	smaller  = [a | a<- xs, a<=x]
+               	greater = [a | a<-xs,a > x]
+
+sumdown :: Int -> Int
+
+sumdown 0 = 0
+sumdown n = n + (sumdown (n-1))
+
+
+my_exp :: Int -> Int -> Int
+my_exp a 0 = 1
+my_exp a b = a * (my_exp a (b-1))
+
+euclid :: Int -> Int -> Int
+euclid x 0 = x
+euclid x 1 = 1
+euclid a b | a > b = euclid b (a `mod` b)   
+           | a < b = euclid b a
+           | otherwise = a
+
+
+my_and :: [Bool] -> Bool
+my_and [] = True
+my_and (x:xs) | x == True = my_and xs
+              | otherwise = False
+
+
+my_concat :: [[a]] -> [a]
+my_concat (x:[]) = x
+my_concat (x : xs) = x ++ (my_concat xs) 
+
+my_replicate_recr :: Int -> a -> [a]
+my_replicate_recr 0 x = [x]
+my_replicate_recr n x = [x] ++ (my_replicate_recr (n-1) x)
+
+nth_element :: Int -> [a] -> a
+nth_element n (x:xs) | n == 1  = x
+                     | otherwise = nth_element (n-1) xs
+
+my_elem :: Eq a => a -> [a] -> Bool
+my_elem x [] = False
+my_elem x (y:ys) | x == y = True
+                 | otherwise = my_elem x ys
+
+
+merge :: Ord a => [a] -> [a] -> [a]
+merge [] [] = []
+merge x [] = x
+merge [] y = y
+merge (x:xs) (y:ys) | x <= y = x : (merge xs (y:ys))
+                    | x > y = y : (merge (x:xs) ys)
+
+half :: [a] -> ([a],[a])
+half lst = splitAt ((length lst)`div` 2) lst
+msort :: Ord a => [a] -> [a]
+msort (x:[]) = [x]
+msort lst = merge (msort left) (msort right)  
+               where
+               	(left,right) = (half lst)
 
 main = do 
 	--let x = my_third [1,2,3,4]
