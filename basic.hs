@@ -73,6 +73,15 @@ my_replicate n x = [y | y <- (gen_set n x)]
 pythagorean :: Int -> [(Int,Int,Int)]
 pythagorean n = [(x,y,z) | x <- [1..n],y <- [1..n], z <- [1..n],x*x + y*y == z*z]
 
+factors :: Int -> [Int]
+factors n = [x | x <- [1..n],n `mod` x == 0]
+
+perfects :: Int -> [Int]
+perfects n = [x | x <- [2..n], sum(factors(x))-x == x]
+
+prime :: Int -> Bool
+prime n = factors(n) == [1,n]
+
 
 
 main = do 
