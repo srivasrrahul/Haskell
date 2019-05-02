@@ -158,6 +158,96 @@ msort lst = merge (msort left) (msort right)
                where
                	(left,right) = (half lst)
 
+my_sum :: [Int] -> Int
+my_sum (x:[]) = x
+my_sum (x:xs) = x + (my_sum xs)
+
+
+my_take :: Int -> [a] -> [a]
+my_take n [] = []
+my_take n (x:xs) | n == 0 = []
+                 | otherwise = x : (my_take (n-1) xs)
+
+select_last :: [a] -> a
+select_last (x:[]) = x
+select_last (x:xs) = select_last xs
+
+my_product :: Num a => [a] -> a
+my_product = foldr (*) 1
+
+
+my_sum_fold :: Num a => [a] -> a
+my_sum_fold = foldr (+) 0
+
+my_length :: [a] -> Int
+my_length = foldr (\_ n -> 1 + n) 0
+
+my_reverse :: [a] -> [a]
+my_reverse = foldr (\x val -> val ++ [x]) []
+
+my_sum_foldl :: Num a => [a] -> a
+my_sum_foldl = foldl (+) 0
+
+my_product_foldl :: Num a => [a] -> a
+my_product_foldl = foldl (*) 1
+
+my_or :: [Bool] -> Bool
+my_or = foldl (||) True
+
+my_and_foldl :: [Bool] -> Bool
+my_and_foldl = foldl (&&) True
+
+my_length_foldl :: [a] -> Int
+my_length_foldl = foldr (\x v -> v +1 ) 0
+
+my_reverse_foldl :: [a] -> [a]
+my_reverse_foldl = foldl (\x v -> [v] ++ x) []
+
+list_comprehension_higher_order :: (a -> a) -> (a -> Bool) -> [a] -> [a]
+list_comprehension_higher_order f p  = (filter p) . (map f)
+
+my_all :: (a -> Bool) -> [a] -> Bool
+my_all p x = length (filter p x) == length x
+
+my_any :: (a -> Bool) -> [a] -> Bool
+my_any p x = length (filter p x) /= 0
+
+my_take_while :: (a -> Bool) -> [a] -> [a]
+my_take_while p m = t 
+	    where (t,_) = 
+		   foldl (\(y,z) x -> 
+		     if z == True then (y,z)
+			 else
+				if (p x) == True then
+					(y ++ [x],False) else
+						(y,True)
+		    ) ([],False) m
+
+
+my_drop_while :: (a -> Bool) -> [a] -> [a]
+my_drop_while p m = t 
+	    where (t,_) = 
+		   foldl (\(y,z) x -> 
+		     if z == True then (y ++ [x],z)
+			 else
+				if (p x) == True then
+					(y,False) else
+						(y ++ [x],True)
+		    ) ([],False) m
+	                            
+my_map :: (a ->a) -> [a] -> [a]
+my_map f  = foldr (\x y -> [f x] ++ y) []
+
+my_filter :: (a -> Bool) -> [a] -> [a]
+my_filter p = foldr (\x y -> if (p x) then [x] ++ y else y) []
+
+
+dec2int :: [Int] -> Int
+dec2int = foldl (\v x -> 10*v + x) 0
+
+
+
+
 main = do 
 	--let x = my_third [1,2,3,4]
 	--let x = luhndouble 6
