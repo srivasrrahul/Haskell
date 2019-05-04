@@ -245,7 +245,49 @@ my_filter p = foldr (\x y -> if (p x) then [x] ++ y else y) []
 dec2int :: [Int] -> Int
 dec2int = foldl (\v x -> 10*v + x) 0
 
+-- my_curry :: (x -> y) -> (y -> z) -> (x -> z)
+-- my_curry f1 f2 = f1 . f2
 
+-- altmap :: (a->b) -> (a -> b) -> [a] -> (Bool,[b])
+-- -- altmap f1 f2 = foldr (\x (y,z) -> 
+-- -- 		if y == True then (False, [(f1 x)] ++ z)
+-- -- 			else (True, [(f2 x)] ++ z)) (True,[])
+altmap :: (a->b) -> (a -> b) -> [a] -> [b]
+altmap f1 f2  z = t where
+	(_,t) = foldr (\x (y,z) -> 
+		if y == True then (False, [(f1 x)] ++ z)
+			else (True, [(f2 x)] ++ z)) (True,[]) z
+
+
+---ADT
+data Nat = Zero | Succ Nat deriving Show
+nat2int :: Nat -> Int
+nat2int Zero = 0
+nat2int (Succ n) = 1 + (nat2int n)
+
+int2nat :: Int -> Nat 
+int2nat 0 = Zero
+int2nat n = Succ (int2nat (n-1))
+
+add_nat :: Nat -> Nat -> Nat
+add_nat m n = int2nat ((nat2int m) + (nat2int n))
+
+add_nat_add_rec :: Nat -> Nat -> Nat
+add_nat_add_rec Zero n = n
+add_nat_add_rec (Succ m) n = Succ (add_nat_add_rec m n)
+
+add_nat_till :: Nat -> Nat -> Nat -> Nat
+add_nat_till m (Succ Zero) acc = acc
+add_nat_till m (Succ n) acc = add_nat_till m n (add_nat_add_rec acc m)
+
+add_nat_mul_rec :: Nat -> Nat -> Nat
+add_nat_mul_rec Zero _ = Zero
+add_nat_mul_rec _ Zero = Zero
+add_nat_mul_rec m (Succ Zero) = m
+add_nat_mul_rec m n =  add_nat_till m n m
+
+
+		
 
 
 main = do 
