@@ -287,8 +287,45 @@ add_nat_mul_rec m (Succ Zero) = m
 add_nat_mul_rec m n =  add_nat_till m n m
 
 
+data Tree a = Leaf a | Node (Tree a) a (Tree a) deriving Show
+occurs :: Eq a => a -> Tree a -> Bool
+occurs val (Leaf x) = val == x
+occurs val (Node left b right) = (occurs val left) || b == val || (occurs val right)
+
+occurs_search :: Ord a => a -> Tree a -> Bool
+occurs_search val (Leaf x) = val == x
+occurs_search val (Node left b right) | b == val = True
+                                      | val < b = occurs_search val left
+                                      | val > b = occurs_search val right
+
+leaves :: Tree a -> Int 
+leaves (Leaf x) = 1
+leaves (Node left x right) = 1 + (leaves left) + leaves (right)
+
+balanced :: Tree a -> Bool
+balanced (Leaf x) = True
+balanced (Node left x right) = left_balanced && right_balanced && abs((leaves left) - (leaves right)) < 1
+              where left_balanced = balanced left
+                    right_balanced = balanced right
+
+-- split_list :: [a] -> ([a],a,[a])
+-- split_list x = (fst split_value,head (snd split_value),tail (snd split_value))
+--               where split_value = splitAt ((length x) `div` 2) x
+
+
+
+data MyTree a = MyLeaf a | MyNode (MyTree a) (MyTree a) deriving Show
+
+balance :: [a] -> MyTree a
+balance (x:[]) = MyLeaf x
+balance (x:y:[]) = MyNode (MyLeaf x) (MyLeaf y)
+balance x = MyNode (balance left) (balance right)
+       where (left,right) = splitAt ((length x) `div` 2) x
 		
 
+data Expr = Val Int | Add Expr Expr deriving Show
+
+--folde :: (Int -> a) -> (a->a->a) -> Expr-> a
 
 main = do 
 	--let x = my_third [1,2,3,4]
