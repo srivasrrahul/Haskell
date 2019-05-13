@@ -327,6 +327,7 @@ data Expr = Val Int | Add Expr Expr deriving Show
 
 --folde :: (Int -> a) -> (a->a->a) -> Expr-> a
 
+
 main = do 
 	--let x = my_third [1,2,3,4]
 	--let x = luhndouble 6
