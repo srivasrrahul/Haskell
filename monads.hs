@@ -44,6 +44,15 @@ instance MyFunctor ((->) a) where
 
 
 
+class MyFunctor t => MyApplicative t where
+	mypure :: a -> t a
+	combine :: t (a -> b) -> t a -> t b
+
+
+
+
+
+
 
 
 
